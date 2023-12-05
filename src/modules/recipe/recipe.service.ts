@@ -25,6 +25,14 @@ export class RecipeService {
     return recipe;
   }
 
+  async addImage(id: number, imageUrl: string): Promise<TOmitRecipe> {
+    const updatedRecipe: TOmitRecipe = await this.groupRepository.addImage(
+      id,
+      imageUrl,
+    );
+    return updatedRecipe;
+  }
+
   async update(
     id: number,
     updateRecipeDto: UpdateRecipeDto,

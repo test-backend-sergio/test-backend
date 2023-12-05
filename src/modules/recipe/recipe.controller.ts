@@ -35,6 +35,11 @@ export class RecipeController {
   }
 
   @UseGuards(AuthGuard)
+  @Patch(':id/image')
+  addImage(@Param('id') id: string, @Body() imageUrl: string) {
+    return this.groupService.addImage(+id, imageUrl);
+  }
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
     return this.groupService.update(+id, updateRecipeDto);

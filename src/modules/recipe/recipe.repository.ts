@@ -11,32 +11,22 @@ export class RecipeRepository {
     const prismaInstance: PrismaClient = PrismaInstance.getInstance();
     const createdRecipe: TOmitRecipe = await prismaInstance.recipe.create({
       data: {
-        description: createRecipeDto.description,
-        admId: createRecipeDto.admId,
+        name: createRecipeDto.name,
+        preparation: createRecipeDto.preparation,
+        ingredients: createRecipeDto.ingredients,
+        userId: createRecipeDto.userId,
       },
       select: {
         id: true,
-        description: true,
+        ingredients: true,
+        imageUrl: true,
+        name: true,
+        preparation: true,
+        userId: true,
       },
     });
 
     return createdRecipe;
-  }
-
-  async addPersonsToRecipe(groupId: number, personsId: number[]) {
-    const prismaInstance: PrismaClient = PrismaInstance.getInstance();
-    try {
-      await prismaInstance.personRecipe.createMany({
-        data: personsId.map((personId) => {
-          return {
-            personId: personId,
-            groupId: groupId,
-          };
-        }),
-      });
-    } catch (error) {
-      throw new Error(error);
-    }
   }
 
   async findAll(): Promise<TOmitRecipe[]> {
@@ -44,15 +34,11 @@ export class RecipeRepository {
     const allRecipes: TOmitRecipe[] = await prismaInstance.recipe.findMany({
       select: {
         id: true,
-        description: true,
-        personRecipe: {
-          select: {
-            person: true,
-          },
-          where: {
-            deletedAt: null,
-          },
-        },
+        name: true,
+        userId: true,
+        imageUrl: true,
+        ingredients: true,
+        preparation: true,
       },
       where: {
         deletedAt: null,
@@ -71,19 +57,38 @@ export class RecipeRepository {
       },
       select: {
         id: true,
-        description: true,
-        personRecipe: {
-          select: {
-            person: true,
-          },
-          where: {
-            deletedAt: null,
-          },
-        },
+        name: true,
+        userId: true,
+        imageUrl: true,
+        ingredients: true,
+        preparation: true,
       },
     });
 
     return recipe;
+  }
+
+  async addImage(id: number, imageUrl: string): Promise<TOmitRecipe> {
+    const prismaInstance: PrismaClient = PrismaInstance.getInstance();
+    const updatedRecipe: TOmitRecipe = await prismaInstance.recipe.update({
+      where: {
+        id: id,
+        deletedAt: null,
+      },
+      data: {
+        imageUrl: imageUrl,
+      },
+      select: {
+        id: true,
+        name: true,
+        userId: true,
+        imageUrl: true,
+        ingredients: true,
+        preparation: true,
+      },
+    });
+
+    return updatedRecipe;
   }
 
   async update(
@@ -94,14 +99,21 @@ export class RecipeRepository {
     const updatedRecipe: TOmitRecipe = await prismaInstance.recipe.update({
       where: {
         id: id,
+        deletedAt: null,
       },
       data: {
-        description: updateRecipeDto.description,
-        admId: updateRecipeDto.admId,
+        name: updateRecipeDto.name,
+        preparation: updateRecipeDto.preparation,
+        ingredients: updateRecipeDto.ingredients,
+        userId: updateRecipeDto.userId,
       },
       select: {
         id: true,
-        description: true,
+        name: true,
+        userId: true,
+        imageUrl: true,
+        ingredients: true,
+        preparation: true,
       },
     });
 
@@ -119,7 +131,11 @@ export class RecipeRepository {
       },
       select: {
         id: true,
-        description: true,
+        name: true,
+        userId: true,
+        imageUrl: true,
+        ingredients: true,
+        preparation: true,
       },
     });
 
