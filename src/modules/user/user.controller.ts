@@ -12,6 +12,9 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '../auth/auth.guard';
+import { Roles } from 'src/shared/decorators/role.decorator';
+import { Role } from 'src/shared/enums/role.enum';
+import { RoleGuard } from '../auth/role.guard';
 
 @Controller('user')
 export class UserController {
@@ -23,17 +26,20 @@ export class UserController {
   }
 
   @Post('/admin')
+  @Roles(Role.ADMIN)
+  @UseGuards(RoleGuard)
   @UseGuards(AuthGuard)
   createUserAdmin(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUserAdmin(createUserDto);
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   findAll() {
     return this.userService.findAll();
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
