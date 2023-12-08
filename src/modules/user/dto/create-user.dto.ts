@@ -1,10 +1,8 @@
-import { Person } from '@prisma/client';
 
 export class CreateUserDto {
-  name: string;
+  // name: string;
   email: string;
   password: string;
-  persons?: Person[];
   createdAt: Date;
   updatedAt: Date;
 }
