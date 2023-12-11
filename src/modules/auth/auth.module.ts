@@ -6,6 +6,7 @@ import { jwtConstants } from './constants';
 import { AuthGuard } from './auth.guard';
 import { UserRepository } from '../user/user.repository';
 import { RoleGuard } from './role.guard';
+import { PermissionGuard } from './permission.guard';
 
 @Module({
   imports: [
@@ -16,6 +17,12 @@ import { RoleGuard } from './role.guard';
     }),
   ],
   controllers: [LoginController],
-  providers: [LoginService, AuthGuard, UserRepository, RoleGuard],
+  providers: [
+    LoginService,
+    AuthGuard,
+    UserRepository,
+    RoleGuard,
+    PermissionGuard,
+  ],
 })
 export class AuthModule {}
