@@ -7,18 +7,21 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { RecipeService } from './recipe.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { PermissionGuard } from '../auth/permission.guard';
+import { AuthMiddleware } from 'src/middlewares/auth.middleware';
 
 @Controller('recipe')
 export class RecipeController {
   constructor(private readonly groupService: RecipeService) {}
 
   @Post()
+  @UseGuards(AuthGuard)
   create(@Body() createRecipeDto: CreateRecipeDto) {
     return this.groupService.create(createRecipeDto);
   }

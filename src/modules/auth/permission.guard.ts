@@ -14,9 +14,13 @@ export class PermissionGuard implements CanActivate {
 
     if (token) {
       const userTokenId = this.getUserIdFromToken(token);
-      const userRequestToken = request.user.id;
+      const userRequestToken = request.body.userId;
 
-      return userTokenId === userRequestToken;
+      console.log(userTokenId, userRequestToken);
+
+      if (userTokenId === userRequestToken) {
+        return true;
+      }
     }
 
     return false;
@@ -24,6 +28,6 @@ export class PermissionGuard implements CanActivate {
 
   private getUserIdFromToken(token: string): number {
     const decodedToken: any = this.jwtService.decode(token);
-    return decodedToken;
+    return decodedToken.sub;
   }
 }

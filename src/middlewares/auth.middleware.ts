@@ -19,6 +19,7 @@ export class AuthMiddleware implements NestMiddleware {
 
   private getUserIdFromToken(token: string): number {
     const decodedToken = this.jwtService.decode(token);
-    return decodedToken;
+
+    return decodedToken.sub;
   }
 }
