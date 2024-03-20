@@ -5,34 +5,35 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  // directUrl = env("DIRECT_URL")
+  directUrl = env("DIRECT_URL")
+}
+model User {
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
+  password   String
+  role       Role      @default(USER)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+  properties Property?
+}
+
+model Property {
+  id          Int       @id @default(autoincrement())
+  type        String
+  address     String
+  description String?
+  userId      Int?      @unique
+  photos    String[]
+  price       Float
+  status      String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  user        User?     @relation(fields: [userId], references: [id])
 }
 
 enum Role {
   ADMIN
   USER
-}
-
-model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String
-  role      Role      @default(USER)
-  recipes   Recipe[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-}
-
-model Recipe {
-  id          Int       @id @default(autoincrement())
-  name        String
-  ingredients String
-  preparation String
-  imageUrl    String?
-  userId      Int?      @unique
-  user        User?     @relation(fields: [userId], references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
 }

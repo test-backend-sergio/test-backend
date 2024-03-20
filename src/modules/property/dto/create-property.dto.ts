@@ -1,4 +1,4 @@
-export class CreateRecipeDto {
+export class CreatePropertyDto {
   name: string;
   ingredients: string;
   preparation: string;

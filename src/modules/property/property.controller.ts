@@ -11,31 +11,31 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
-import { RecipeService } from './recipe.service';
-import { CreateRecipeDto } from './dto/create-recipe.dto';
-import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { PropertyService } from './property.service';
+import { CreatePropertyDto } from './dto/create-property.dto';
+import { UpdatePropertyDto } from './dto/update-property.dto';
 import { PermissionGuard } from '../auth/permission.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 
-@Controller('recipe')
-export class RecipeController {
-  constructor(private readonly recipeService: RecipeService) {}
+@Controller('property')
+export class PropertyController {
+  constructor(private readonly propertyService: PropertyService) {}
 
   @Post()
   @UseGuards(AuthGuard)
-  create(@Body() createRecipeDto: CreateRecipeDto) {
-    return this.recipeService.create(createRecipeDto);
+  create(@Body() createPropertyDto: CreatePropertyDto) {
+    return this.propertyService.create(createPropertyDto);
   }
 
   @Get()
   findAll() {
-    return this.recipeService.findAll();
+    return this.propertyService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.recipeService.findOne(+id);
+    return this.propertyService.findOne(+id);
   }
 
   @UseGuards(AuthGuard)
@@ -58,18 +58,18 @@ export class RecipeController {
   ) {
     image.filename = `${id}.${image.mimetype.split('/')[1]}`;
     const imageUrl = `/uploads/${image.filename}`;
-    return this.recipeService.addImage(+id, imageUrl);
+    return this.propertyService.addImage(+id, imageUrl);
   }
 
   @UseGuards(AuthGuard, PermissionGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
-    return this.recipeService.update(+id, updateRecipeDto);
+  update(@Param('id') id: string, @Body() updatePropertyDto: UpdatePropertyDto) {
+    return this.propertyService.update(+id, updatePropertyDto);
   }
 
   @UseGuards(AuthGuard, PermissionGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.recipeService.remove(+id);
+    return this.propertyService.remove(+id);
   }
 }

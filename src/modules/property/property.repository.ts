@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import PrismaInstance from 'src/shared/utils/prisma.client';
 import { PrismaClient } from '@prisma/client';
-import { CreateRecipeDto } from './dto/create-recipe.dto';
-import { UpdateRecipeDto } from './dto/update-recipe.dto';
-import { TOmitRecipe } from 'src/shared/types/recipe.type';
+import { CreatePropertyDto } from './dto/create-property.dto';
+import { UpdatePropertyDto } from './dto/update-property.dto';
+import { TOmitProperty } from 'src/shared/types/property.type';
 
 @Injectable()
-export class RecipeRepository {
-  async create(createRecipeDto: CreateRecipeDto): Promise<TOmitRecipe> {
+export class PropertyRepository {
+  async create(createPropertyDto: CreatePropertyDto): Promise<TOmitProperty> {
     const prismaInstance: PrismaClient = PrismaInstance.getInstance();
-    const createdRecipe: TOmitRecipe = await prismaInstance.recipe.create({
+    const createdProperty: TOmitProperty = await prismaInstance.property.create({
       data: {
-        name: createRecipeDto.name,
-        preparation: createRecipeDto.preparation,
-        ingredients: createRecipeDto.ingredients,
-        userId: createRecipeDto.userId,
+        name: createPropertyDto.name,
+        preparation: createPropertyDto.preparation,
+        ingredients: createPropertyDto.ingredients,
+        userId: createPropertyDto.userId,
       },
       select: {
         id: true,
@@ -26,12 +26,12 @@ export class RecipeRepository {
       },
     });
 
-    return createdRecipe;
+    return createdProperty;
   }
 
-  async findAll(): Promise<TOmitRecipe[]> {
+  async findAll(): Promise<TOmitProperty[]> {
     const prismaInstance: PrismaClient = PrismaInstance.getInstance();
-    const allRecipes: TOmitRecipe[] = await prismaInstance.recipe.findMany({
+    const allPropertys: TOmitProperty[] = await prismaInstance.property.findMany({
       select: {
         id: true,
         name: true,
@@ -45,12 +45,12 @@ export class RecipeRepository {
       },
     });
 
-    return allRecipes;
+    return allPropertys;
   }
 
-  async findOne(id: number): Promise<TOmitRecipe> {
+  async findOne(id: number): Promise<TOmitProperty> {
     const prismaInstance: PrismaClient = PrismaInstance.getInstance();
-    const recipe: TOmitRecipe = await prismaInstance.recipe.findUnique({
+    const property: TOmitProperty = await prismaInstance.property.findUnique({
       where: {
         id: id,
         deletedAt: null,
@@ -65,12 +65,12 @@ export class RecipeRepository {
       },
     });
 
-    return recipe;
+    return property;
   }
 
-  async addImage(id: number, imageUrl: string): Promise<TOmitRecipe> {
+  async addImage(id: number, imageUrl: string): Promise<TOmitProperty> {
     const prismaInstance: PrismaClient = PrismaInstance.getInstance();
-    const updatedRecipe: TOmitRecipe = await prismaInstance.recipe.update({
+    const updatedProperty: TOmitProperty = await prismaInstance.property.update({
       where: {
         id: id,
         deletedAt: null,
@@ -88,24 +88,24 @@ export class RecipeRepository {
       },
     });
 
-    return updatedRecipe;
+    return updatedProperty;
   }
 
   async update(
     id: number,
-    updateRecipeDto: UpdateRecipeDto,
-  ): Promise<TOmitRecipe> {
+    updatePropertyDto: UpdatePropertyDto,
+  ): Promise<TOmitProperty> {
     const prismaInstance: PrismaClient = PrismaInstance.getInstance();
-    const updatedRecipe: TOmitRecipe = await prismaInstance.recipe.update({
+    const updatedProperty: TOmitProperty = await prismaInstance.property.update({
       where: {
         id: id,
         deletedAt: null,
       },
       data: {
-        name: updateRecipeDto.name,
-        preparation: updateRecipeDto.preparation,
-        ingredients: updateRecipeDto.ingredients,
-        userId: updateRecipeDto.userId,
+        name: updatePropertyDto.name,
+        preparation: updatePropertyDto.preparation,
+        ingredients: updatePropertyDto.ingredients,
+        userId: updatePropertyDto.userId,
       },
       select: {
         id: true,
@@ -117,12 +117,12 @@ export class RecipeRepository {
       },
     });
 
-    return updatedRecipe;
+    return updatedProperty;
   }
 
-  async remove(id: number): Promise<TOmitRecipe> {
+  async remove(id: number): Promise<TOmitProperty> {
     const prismaInstance: PrismaClient = PrismaInstance.getInstance();
-    const deletedRecipe: TOmitRecipe = await prismaInstance.recipe.update({
+    const deletedProperty: TOmitProperty = await prismaInstance.property.update({
       where: {
         id: id,
       },
@@ -139,6 +139,6 @@ export class RecipeRepository {
       },
     });
 
-    return deletedRecipe;
+    return deletedProperty;
   }
 }
